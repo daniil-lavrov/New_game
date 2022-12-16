@@ -3,6 +3,7 @@ playing_field = [['-', '-', '-'],
                  ['-', '-', '-'],
                  ['-', '-', '-']]
 player_sign = 'x'
+number_of_moves = 1
 
 
 def print_field(mas):
@@ -34,15 +35,9 @@ def players_move():
 
 def is_it_win():
     def game_over(sign):
-        global player_sign
         print_field(playing_field)
         print(f'Победил игрок {sign}')
         print('Игра окончена')
-        for i in range(3):
-            for j in range(3):
-                playing_field[i][j] = '-'
-        player_sign = 'x'
-
     for i in range(3):
         if playing_field[i][0] == playing_field[i][1] == playing_field[i][2] and playing_field[i][0] != '-':
             game_over(playing_field[i][0])
@@ -56,11 +51,17 @@ def is_it_win():
         elif playing_field[0][2] == playing_field[1][1] == playing_field[2][0] and playing_field[0][2] != '-':
             game_over(playing_field[0][2])
             return True
-        else:
-            return False
+    else:
+        return False
+
 
 def start_game():
     global game_on
+    global player_sign
+    for i in range(3):
+        for j in range(3):
+            playing_field[i][j] = '-'
+    player_sign = 'x'
     answ = input('Начать игру? Введите "Y", чтобы начать или "N", чтобы закончить. ')
     if answ == 'Y':
         game_on = True
@@ -75,7 +76,13 @@ def start_game():
 while game_on:
     print_field(playing_field)
     players_move()
+    number_of_moves += 1
     if is_it_win():
+        number_of_moves = 1
         game_on = False
         start_game()
-
+    if number_of_moves > 9:
+        print('Ничья!')
+        number_of_moves = 1
+        game_on = False
+        start_game()
